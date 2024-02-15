@@ -1,0 +1,23 @@
+name: Pull Request
+
+on:
+  pull_request:
+    branches: [ "main" ]
+  workflow_call:
+  workflow_dispatch:
+
+
+jobs:
+  build-and-test:
+  - uses: dorny/paths-filter@v3
+    id: filter
+    with:
+      filters: |
+        folder1:
+          - 'folder1/**'
+        folder2:
+          - 'folder2/**'
+  - name: build-and-test
+      if: steps.filter.outputs.folder1 == 'true' && steps.filter.outputs.folder2 == 'true'
+      run: exit 1
+    run: echo "MERGE"
