@@ -9,19 +9,19 @@ on:
 
 jobs:
   build-and-test:
-  runs-on: ubuntu-latest
-  steps:
-  - uses: actions/checkout@v4
-  - uses: dorny/paths-filter@v3
-    id: filter
-    with:
-      filters: |
-        folder1:
-          - 'folder1/**'
-        folder2:
-          - 'folder2/**'
-  - name: validate
-    if: ${{ (steps.filter.outputs.folder1 == 'true') && (steps.filter.outputs.folder2 == 'true') }}
-    run: exit 1
-  - name: build-and-test    
-    run: echo "MERGE"
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: dorny/paths-filter@v3
+      id: filter
+      with:
+        filters: |
+          folder1:
+            - 'folder1/**'
+          folder2:
+            - 'folder2/**'
+    - name: validate
+      if: ${{ (steps.filter.outputs.folder1 == 'true') && (steps.filter.outputs.folder2 == 'true') }}
+      run: exit 1
+    - name: build-and-test    
+      run: echo "MERGE"
