@@ -1,0 +1,1 @@
+# stop-merge-on-paths
