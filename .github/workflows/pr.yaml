@@ -18,6 +18,6 @@ jobs:
         folder2:
           - 'folder2/**'
   - name: build-and-test
-      if: (steps.filter.outputs.folder1 == 'true' && steps.filter.outputs.folder2 == 'true')
+      if: ${{ (steps.filter.outputs.folder1 == 'true') && (steps.filter.outputs.folder2 == 'true') }}
       run: exit 1
     run: echo "MERGE"
