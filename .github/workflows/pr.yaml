@@ -23,7 +23,6 @@ jobs:
 
     - name: inner was changed but not outer
       if: ${{ (steps.filter.outputs.outerButNotInner == 'true') && (steps.filter.outputs.inner == 'true') }}
-      run: echo "Not allowed!"
       run: exit 1
 
     - name: build-and-test    
