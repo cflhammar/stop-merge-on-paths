@@ -16,12 +16,15 @@ jobs:
       id: filter
       with:
         filters: |
-          folder1:
-            - 'folder1/**'
-          folder2:
-            - 'folder2/**'
-    - name: validate
-      if: ${{ (steps.filter.outputs.folder1 == 'true') && (steps.filter.outputs.folder2 == 'true') }}
+          outerButNotInner:
+            - 'folder1/!(folder2/**)/**'
+          inner:
+            - 'folder1/folder2/**'
+
+    - name: inner was changed but not outer
+      if: ${{ (steps.filter.outputs.outerButNotInner == 'true') && (steps.filter.outputs.inner == 'true') }}
+      run: echo "Not allowed!"
       run: exit 1
+
     - name: build-and-test    
       run: echo "MERGE"
