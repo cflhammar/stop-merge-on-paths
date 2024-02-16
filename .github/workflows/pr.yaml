@@ -17,7 +17,6 @@ jobs:
       with:
         filters: |
           outerButNotInner:
-            - '**'
             - '!folder1/folder2/**'
           inner:
             - 'folder1/folder2/**'
