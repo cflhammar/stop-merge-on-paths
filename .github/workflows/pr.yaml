@@ -22,9 +22,7 @@ jobs:
             - 'folder1/folder2/**'
 
     - name: inner was changed but not outer
-      if:  | 
-        ${{ (steps.filter.outputs.outerButNotInner == 'true') && 
-        (steps.filter.outputs.inner == 'true') }}
+      if:  ${{ (steps.filter.outputs.outerButNotInner == 'true') && (steps.filter.outputs.inner == 'true') }}
       run: |
         echo "you are not allowed"
         exit 1
