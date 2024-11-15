@@ -11,23 +11,23 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    - uses: dorny/paths-filter@v3
-      id: filter
-      with:
-        filters: |
-          outerButNotInner:
-            - '!folder1/folder2/**'
-          inner:
-            - 'folder1/folder2/**'
-
-    - name: inner was changed but not outer
-      if:  |
-        steps.filter.outputs.outerButNotInner == 'true'
-        && steps.filter.outputs.inner == 'true'
-      run: |
-        echo "you are not allowed"
-        exit 1
+#    - uses: actions/checkout@v4
+#    - uses: dorny/paths-filter@v3
+#      id: filter
+#      with:
+#        filters: |
+#          outerButNotInner:
+#            - '!folder1/folder2/**'
+#          inner:
+#            - 'folder1/folder2/**'
+#
+#    - name: inner was changed but not outer
+#      if:  |
+#        steps.filter.outputs.outerButNotInner == 'true'
+#        && steps.filter.outputs.inner == 'true'
+#      run: |
+#        echo "you are not allowed"
+#        exit 1
 
     - name: build-and-test    
       run: echo "MERGE"

@@ -1,0 +1,65 @@
+name: Release QA
+
+on:
+  repository_dispatch:
+    types: [release-qa]
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        default: ''
+        type: string
+        required: false
+        description: The short sha (8 first characters) of the commit to deploy, leave empty to deploy the latest commit.
+
+env:
+  IMAGE_TAG: ${{ inputs.image_tag }}
+
+jobs:
+  set-image-tag:
+    name: Set Image Tag
+    runs-on: ubuntu-latest
+    outputs:
+      output_image_tag: ${{ steps.set-output.outputs.output_image_tag }}
+    steps:
+      - name: debug
+        run: echo ${{ github.event.outputs.output_image_tag }}
+
+      - name: Set Manual Input as Image Tag
+        if: "${{ inputs.image_tag != '' }}"
+        run: echo "IMAGE_TAG=`echo ${{ inputs.image_tag }}`" >> $GITHUB_ENV
+
+      - name: Previous Workflow Output as Image Tag
+        if: "${{ inputs.image_tag == '' && github.event.client_payload.image_tag != '' }}"
+        run: echo "IMAGE_TAG=`echo ${{ github.event.client_payload.image_tag }}`" >> $GITHUB_ENV
+
+      - name: Set Last Commit on Current Branch as Image Tag
+        if: "${{ inputs.image_tag == '' && github.event.client_payload.image_tag == '' }}"
+        run: echo "IMAGE_TAG=`echo ${GITHUB_REF_NAME}.${GITHUB_SHA::8}`" >> $GITHUB_ENV
+
+      - name: debug
+        run: echo "IMAGE_TAG=${IMAGE_TAG}"
+
+      - name: Set output
+        id: set-output
+        run: echo "output_image_tag=${{ env.IMAGE_TAG }}" >> $GITHUB_OUTPUT
+
+  deploy:
+    name: Deploy qa
+    needs: set-image-tag
+    uses: ./.github/workflows/release_env.yml
+    with:
+      disco_environment: "qa"
+      bakery_environment: "weu-qa"
+      image_tag: ${{ needs.set-image-tag.outputs.output_image_tag }}
+    secrets: inherit
+
+  trigger-next:
+    name: Trigger Next
+    needs: [deploy, set-image-tag]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Repository Dispatch
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          event-type: release-prod
+          client-payload: '{"image_tag": "${{ needs.set-image-tag.outputs.output_image_tag }}"}'
