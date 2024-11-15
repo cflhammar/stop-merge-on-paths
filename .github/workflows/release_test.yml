@@ -48,6 +48,7 @@ jobs:
     name: Trigger Next
     needs: [deploy, set-image-tag]
     runs-on: ubuntu-latest
+    permissions: write-all
     steps:
       - name: Repository Dispatch
         uses: peter-evans/repository-dispatch@v3
