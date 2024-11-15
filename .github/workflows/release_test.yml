@@ -30,9 +30,6 @@ jobs:
           fi
           echo "OUTPUT=$IMAGE_TAG" >> $GITHUB_OUTPUT
 
-      - name: debug
-        run: echo ${{ steps.set-image-tag.outputs.OUTPUT }}
-
   deploy:
     needs: [set-image-tag]
     name: Deploy test

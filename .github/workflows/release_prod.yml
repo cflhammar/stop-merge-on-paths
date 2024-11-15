@@ -50,20 +50,20 @@ jobs:
       image_tag: ${{ needs.set-image-tag.outputs.output_image_tag }}
     secrets: inherit
 
-#  create-release-tag:
-#    needs: [ deploy ]
-#    name: 'Release notes'
-#    runs-on: 'ubuntu-latest'
-#    steps:
-#      - name: set date env
-#        run: echo "NOW=$(date +'v%Y.%m.%d%H%M%S')" >> $GITHUB_ENV
-#
-#      - name: Create release
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#        run: |
-#          gh release create "${{ env.NOW }}" \
-#              --repo="$GITHUB_REPOSITORY" \
-#              --title="${{ env.NOW }}" \
-#              --target=${{ GITHUB.SHA }} \
-#              --generate-notes
+  create-release-tag:
+    needs: [ deploy ]
+    name: 'Release notes'
+    runs-on: 'ubuntu-latest'
+    steps:
+      - name: set date env
+        run: echo "NOW=$(date +'v%Y.%m.%d%H%M%S')" >> $GITHUB_ENV
+
+      - name: Create release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "${{ env.NOW }}" \
+              --repo="$GITHUB_REPOSITORY" \
+              --title="${{ env.NOW }}" \
+              --target=${{ GITHUB.SHA }} \
+              --generate-notes
