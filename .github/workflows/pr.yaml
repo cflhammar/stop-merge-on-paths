@@ -39,8 +39,8 @@ jobs:
     steps:
       - name: Repository Dispatch
         uses: peter-evans/repository-dispatch@v3
-        env:
-          IMAGE_TAG: '${GITHUB_REF_NAME}.${GITHUB_SHA::8}'
+#        env:
+#          IMAGE_TAG: '${GITHUB_REF_NAME}.${GITHUB_SHA::8}'
         with:
           event-type: release-test
-          client-payload: '{"image_tag": "$IMAGE_TAG"}'
+          client-payload: '{"image_tag": "`echo ${GITHUB_REF_NAME}.${GITHUB_SHA::8}`"}'
