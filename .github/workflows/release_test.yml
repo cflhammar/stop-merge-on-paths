@@ -21,7 +21,7 @@ jobs:
       - name: Set Image Tag
         id: set-image-tag
         run: |
-          if [[ "${{ inputs.image_tag }}" != "" ]]; then
+          if [[ "${{ inputs.image_tag }}" == "" ]]; then
             IMAGE_TAG="empty"
           elif [[ "${{ github.event.client_payload.image_tag }}" != "" ]]; then
             IMAGE_TAG="payload"
