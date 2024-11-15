@@ -21,7 +21,7 @@ jobs:
       - name: Set Image Tag
         id: set-image-tag
         run: |
-          "OUTPUT=hej" >> $GITHUB_OUTPUT
+          echo "OUTPUT=hej" >> $GITHUB_OUTPUT
 #          if [[ "${{ inputs.image_tag }}" != "" ]]; then
 #            IMAGE_TAG="${{ inputs.image_tag }}"
 #          elif [[ "${{ github.event.client_payload.image_tag }}" != "" ]]; then
