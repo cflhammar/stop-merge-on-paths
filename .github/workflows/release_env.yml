@@ -1,5 +1,3 @@
-run-name: Release Test - ${{ inputs.IMAGE_TAG }}
-
 on:
   workflow_call:
     inputs:
