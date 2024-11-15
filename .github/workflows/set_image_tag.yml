@@ -8,23 +8,26 @@ on:
             required: true
             type: string
 
-
 jobs:
   set-image-tag:
     runs-on: ubuntu-latest
     outputs:
-        output_image_tag: ${{ steps.set-image-tag.outputs.output_image_tag }}
+      output_image_tag: ${{ steps.set-output.outputs.OUTPUT }}
     steps:
       - name: Set Image Tag
         id: set-image-tag
         run: |
-          if [[ "${{ inputs.manual_input }}" != "" ]]; then
-            IMAGE_TAG=${{ inputs.manual_input }}
-          elif [[ "${{ inputs.payload_input }}" != "" ]]; then
-            IMAGE_TAG=${{ inputs.payload_input }}
+          # If commit is provided, use it
+          if [[ "${{ inputs.commit }}" != "" ]]; then
+            IMAGE_TAG="${GITHUB_REF_NAME}.${{ inputs.commit }}"
+          
+          # If triggered by a repository_dispatch event, use the image_tag from the payload
+          elif [[ "${{ github.event.client_payload.image_tag }}" != "" ]]; then
+            IMAGE_TAG="${{ github.event.client_payload.image_tag }}"
+          
+          # Otherwise, use the latest commit on the branch
           else
-            IMAGE_TAG=${GITHUB_REF_NAME}.${GITHUB_SHA::8}
-
-          echo $IMAGE_TAG
-          echo output_image_tag=$IMAGE_TAG >> $GITHUB_OUTPUT
+            IMAGE_TAG="${GITHUB_REF_NAME}.${GITHUB_SHA::8}"
           fi
+
+          echo "OUTPUT=$IMAGE_TAG" >> $GITHUB_OUTPUT
