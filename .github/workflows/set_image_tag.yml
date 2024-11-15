@@ -7,6 +7,9 @@ on:
         payload_input:
             required: true
             type: string
+    outputs:
+        output_image_tag:
+            value: ${{ jobs.set-image-tag.outputs.output_image_tag }}
 
 jobs:
   set-image-tag:
