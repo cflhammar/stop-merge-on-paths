@@ -1,10 +1,8 @@
 name: Release Test
 
 on:
-  workflow_run:
-    workflows: [Pull Request]
-    types: [completed]
-    branches: [main]
+  repository_dispatch:
+    types: [release-test]
   workflow_dispatch:
     inputs:
       image_tag:
@@ -24,7 +22,12 @@ jobs:
         if: "${{ inputs.image_tag != '' }}"
         run: echo "IMAGE_TAG=`echo ${{ inputs.image_tag }}`" >> $GITHUB_ENV
 
+      - name: Previous Workflow Output as Image Tag
+        if: "${{ inputs.image_tag == '' && github.event.client_payload.image_tag != '' }}"
+        run: echo "IMAGE_TAG=`echo ${{ github.event.client_payload.image_tag }}`" >> $GITHUB_ENV
+
       - name: Set Last Commit on Current Branch as Image Tag
+        if: "${{ inputs.image_tag == '' && github.event.client_payload.image_tag == '' }}"
         run: echo "IMAGE_TAG=`echo ${GITHUB_REF_NAME}.${GITHUB_SHA::8}`" >> $GITHUB_ENV
 
       - name: debug

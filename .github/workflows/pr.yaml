@@ -31,3 +31,14 @@ jobs:
 
     - name: build-and-test    
       run: echo "MERGE"
+
+  trigger-next:
+    name: Trigger Next
+    needs: [build-and-test]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Repository Dispatch
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          event-type: release-test
+          client-payload: '{"image_tag": "${GITHUB_REF_NAME}.${GITHUB_SHA::8}"}'

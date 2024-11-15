@@ -21,9 +21,6 @@ jobs:
     outputs:
       output_image_tag: ${{ steps.set-output.outputs.output_image_tag }}
     steps:
-      - name: debug
-        run: echo ${{ github.event.outputs.output_image_tag }}
-
       - name: Set Manual Input as Image Tag
         if: "${{ inputs.image_tag != '' }}"
         run: echo "IMAGE_TAG=`echo ${{ inputs.image_tag }}`" >> $GITHUB_ENV
