@@ -21,11 +21,10 @@ jobs:
       - name: Set Image Tag
         id: set-image-tag
         run: |
-          IMAGE_TAG=""
           if [[ "${{ inputs.image_tag }}" != "" ]]; then
-            IMAGE_TAG="${{ inputs.image_tag }}"
+            IMAGE_TAG="empty"
           elif [[ "${{ github.event.client_payload.image_tag }}" != "" ]]; then
-            IMAGE_TAG="${{ github.event.client_payload.image_tag }}"
+            IMAGE_TAG="payload"
           else
             BRANCH=${GITHUB_REF_NAME}
             VERSION=${GITHUB_SHA::8}
