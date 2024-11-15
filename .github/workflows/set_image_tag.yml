@@ -14,16 +14,20 @@ jobs:
     outputs:
       output_image_tag: ${{ steps.set-output.outputs.OUTPUT }}
     steps:
+      - name: debug
+        run: | 
+          echo "manual_input: ${{ inputs.manual_input }}"
+          echo "payload_input: ${{ inputs.payload_input }}"
       - name: Set Image Tag
         id: set-image-tag
         run: |
           # If commit is provided, use it
-          if [[ "${{ inputs.commit }}" != "" ]]; then
-            IMAGE_TAG="${GITHUB_REF_NAME}.${{ inputs.commit }}"
+          if [[ "${{ inputs.manual_input }}" != "" ]]; then
+            IMAGE_TAG="${GITHUB_REF_NAME}.${{ inputs.manual_input }}"
           
           # If triggered by a repository_dispatch event, use the image_tag from the payload
-          elif [[ "${{ github.event.client_payload.image_tag }}" != "" ]]; then
-            IMAGE_TAG="${{ github.event.client_payload.image_tag }}"
+          elif [[ "${{ payload_input }}" != "" ]]; then
+            IMAGE_TAG="${{ payload_input }}"
           
           # Otherwise, use the latest commit on the branch
           else
@@ -31,3 +35,7 @@ jobs:
           fi
 
           echo "OUTPUT=$IMAGE_TAG" >> $GITHUB_OUTPUT
+
+      - name: debug
+        run: |
+          echo "${{ steps.set-output.outputs.OUTPUT }}"
