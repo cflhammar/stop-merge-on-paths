@@ -23,7 +23,7 @@ jobs:
           run: |
             if [[ "${{ inputs.image_tag }}" != "" ]]; then
               IMAGE_TAG=${{ inputs.image_tag }}
-            elif [[ ${{ github.event.client_payload.image_tag }} != "" ]]; then
+            elif [[ "${{ github.event.client_payload.image_tag }}" != "" ]]; then
               IMAGE_TAG=${{ github.event.client_payload.image_tag }}
             else
               IMAGE_TAG=${GITHUB_REF_NAME}.${GITHUB_SHA::8}
