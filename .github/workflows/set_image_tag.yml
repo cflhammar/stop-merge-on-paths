@@ -1,0 +1,30 @@
+on:
+  workflow_call:
+    inputs:
+        manual_input:
+            required: true
+            type: string
+        payload_input:
+            required: true
+            type: string
+
+
+jobs:
+  set-image-tag:
+    runs-on: ubuntu-latest
+    outputs:
+        output_image_tag: ${{ steps.set-image-tag.outputs.OUTPUT }}
+    steps:
+      - name: Set Image Tag
+        id: set-image-tag
+        run: |
+          if [[ "${{ inputs.manual_input }}" != "" ]]; then
+            IMAGE_TAG=${{ inputs.manual_input }}
+          elif [[ "${{ inputs.payload_input }}" != "" ]]; then
+            IMAGE_TAG=${{ inputs.payload_input }}
+          else
+            IMAGE_TAG=${GITHUB_REF_NAME}.${GITHUB_SHA::8}
+
+          echo $IMAGE_TAG
+          echo output_image_tag=$IMAGE_TAG >> $GITHUB_OUTPUT
+          fi

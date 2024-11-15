@@ -14,31 +14,10 @@ on:
 jobs:
   set-image-tag:
     name: Set Image Tag
-    runs-on: ubuntu-latest
-    outputs:
-      output_image_tag: ${{ steps.set-output.outputs.output_image_tag }}
-    steps:
-      - name: debug
-        run: echo ${{ github.event.outputs.output_image_tag }}
-
-      - name: Set Manual Input as Image Tag
-        if: "${{ inputs.image_tag != '' }}"
-        run: echo "IMAGE_TAG=`echo ${{ inputs.image_tag }}`" >> $GITHUB_ENV
-
-      - name: Set Previous Output as Image Tag
-        if: "${{ inputs.image_tag == '' && github.event.client_payload.image_tag != '' }}"
-        run: echo "IMAGE_TAG=`echo ${{ github.event.client_payload.image_tag }}`" >> $GITHUB_ENV
-
-      - name: Set Last Commit on Current Branch as Image Tag
-        if: "${{ inputs.image_tag == '' && github.event.client_payload.image_tag == '' }}"
-        run: echo "IMAGE_TAG=`echo ${GITHUB_REF_NAME}.${GITHUB_SHA::8}`" >> $GITHUB_ENV
-
-      - name: debug
-        run: echo "IMAGE_TAG=${IMAGE_TAG}"
-
-      - name: Set output
-        id: set-output
-        run: echo "output_image_tag=${{ env.IMAGE_TAG }}" >> $GITHUB_OUTPUT
+    uses: ./.github/workflows/set_image_tag.yml
+    with:
+      manual_input: ${{ inputs.commit }}
+      payload_input: ${{ github.event.client_payload.image_tag }}
 
   deploy:
     needs: set-image-tag

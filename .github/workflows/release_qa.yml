@@ -14,23 +14,10 @@ on:
 jobs:
   set-image-tag:
     name: Set Image Tag
-    runs-on: ubuntu-latest
-    outputs:
-      output_image_tag: ${{ steps.set-image-tag.outputs.output_image_tag }}
-    steps:
-        - name: Set Image Tag
-          id: set-image-tag
-          run: |
-            if [[ "${{ inputs.image_tag }}" != "" ]]; then
-              IMAGE_TAG=${{ inputs.image_tag }}
-            elif [[ "${{ github.event.client_payload.image_tag }}" != "" ]]; then
-              IMAGE_TAG=${{ github.event.client_payload.image_tag }}
-            else
-              IMAGE_TAG=${GITHUB_REF_NAME}.${GITHUB_SHA::8}
-            
-            echo $IMAGE_TAG
-            echo output_image_tag=$IMAGE_TAG >> $GITHUB_OUTPUT
-            fi
+    uses: ./.github/workflows/set_image_tag.yml
+    with:
+      manual_input: ${{ inputs.commit }}
+      payload_input: ${{ github.event.client_payload.image_tag }}
 
   deploy:
     name: Deploy qa

@@ -14,21 +14,10 @@ on:
 jobs:
   set-image-tag:
     name: Set Image Tag
-    runs-on: ubuntu-latest
-    outputs:
-        output_image_tag: ${{ steps.set-image-tag.outputs.OUTPUT }}
-    steps:
-      - name: Set Image Tag
-        id: set-image-tag
-        run: |
-          if [[ "${{ inputs.commit }}" != "" ]]; then
-            IMAGE_TAG="${GITHUB_REF_NAME}.${{ inputs.commit }}"
-          elif [[ "${{ github.event.client_payload.image_tag }}" != "" ]]; then
-            IMAGE_TAG="${{ github.event.client_payload.image_tag }}"
-          else
-            IMAGE_TAG="${GITHUB_REF_NAME}.${GITHUB_SHA::8}"
-          fi
-          echo "OUTPUT=$IMAGE_TAG" >> $GITHUB_OUTPUT
+    uses: ./.github/workflows/set_image_tag.yml
+    with:
+      manual_input: ${{ inputs.commit }}
+      payload_input: ${{ github.event.client_payload.image_tag }}
 
   deploy:
     needs: [set-image-tag]
@@ -51,6 +40,7 @@ jobs:
         with:
           event-type: release-qa
           client-payload: '{"image_tag": "${{ needs.set-image-tag.outputs.output_image_tag }}"}'
+
   create-release-tag:
     needs: [ deploy, set-image-tag ]
     name: 'Release notes'
