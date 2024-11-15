@@ -1,4 +1,4 @@
-run-name: Release Test - ${{ env.IMAGE_TAG }}
+run-name: Release Test - ${{ inputs.IMAGE_TAG }}
 
 on:
   workflow_call:
