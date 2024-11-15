@@ -21,17 +21,16 @@ jobs:
       - name: Set Image Tag
         id: set-image-tag
         run: |
-          if [[ "${{ inputs.image_tag }}" != "" ]]; then
-            IMAGE_TAG="${{ inputs.image_tag }}"
-          elif [[ "${{ github.event.client_payload.image_tag }}" != "" ]]; then
-            IMAGE_TAG="${{ github.event.client_payload.image_tag }}"
-          else
-            BRANCH=${GITHUB_REF_NAME}
-            VERSION=${GITHUB_SHA::8}
-            IMAGE_TAG="${BRANCH}.${VERSION}"
+          "OUTPUT=hej" >> $GITHUB_OUTPUT
+#          if [[ "${{ inputs.image_tag }}" != "" ]]; then
+#            IMAGE_TAG="${{ inputs.image_tag }}"
+#          elif [[ "${{ github.event.client_payload.image_tag }}" != "" ]]; then
+#            IMAGE_TAG="${{ github.event.client_payload.image_tag }}"
+#          else
+#            BRANCH=${GITHUB_REF_NAME}
+#            VERSION=${GITHUB_SHA::8}
+#            IMAGE_TAG="${BRANCH}.${VERSION}"
 
-          "OUTPUT=$(echo $IMAGE_TAG)" >> $GITHUB_OUTPUT
-          fi
       - name: debug
         run: echo ${{ steps.set-image-tag.outputs.OUTPUT }}
 
