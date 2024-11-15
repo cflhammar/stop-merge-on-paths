@@ -5,7 +5,7 @@ on:
     types: [release-test]
   workflow_dispatch:
     inputs:
-      image_tag:
+      commit:
         default: ''
         type: string
         required: false
@@ -21,16 +21,13 @@ jobs:
       - name: Set Image Tag
         id: set-image-tag
         run: |
-          if [[ "${{ inputs.image_tag }}" != "" ]]; then
-            IMAGE_TAG="${{ inputs.image_tag }}"
+          if [[ "${{ inputs.commit }}" != "" ]]; then
+            IMAGE_TAG="${GITHUB_REF_NAME}.${{ inputs.commit }}"
           elif [[ "${{ github.event.client_payload.image_tag }}" != "" ]]; then
             IMAGE_TAG="${{ github.event.client_payload.image_tag }}"
           else
-            BRANCH=${GITHUB_REF_NAME}
-            VERSION=${GITHUB_SHA::8}
-            IMAGE_TAG="${BRANCH}.${VERSION}"
+            IMAGE_TAG="${GITHUB_REF_NAME}.${GITHUB_SHA::8}"
           fi
-
           echo "OUTPUT=$IMAGE_TAG" >> $GITHUB_OUTPUT
 
       - name: debug
