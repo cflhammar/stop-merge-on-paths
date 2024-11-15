@@ -26,8 +26,8 @@ jobs:
             IMAGE_TAG="${GITHUB_REF_NAME}.${{ inputs.manual_input }}"
           
           # If triggered by a repository_dispatch event, use the image_tag from the payload
-          elif [[ "${{ payload_input }}" != "" ]]; then
-            IMAGE_TAG="${{ payload_input }}"
+          elif [[ "${{ inputs.payload_input }}" != "" ]]; then
+            IMAGE_TAG="${{ inputs.payload_input }}"
           
           # Otherwise, use the latest commit on the branch
           else
