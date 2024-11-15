@@ -16,7 +16,7 @@ jobs:
     name: Set Image Tag
     runs-on: ubuntu-latest
     outputs:
-        output_image_tag: ${{ steps.set-output.outputs.output_image_tag }}
+        output_image_tag: ${{ steps.set-output.outputs.OUTPUT }}
     steps:
       - name: Set Image Tag
         id: set-image-tag
@@ -30,10 +30,10 @@ jobs:
             VERSION=${GITHUB_SHA::8}
             IMAGE_TAG="${BRANCH}.${VERSION}"
 
-          echo "output_image_tag=$IMAGE_TAG" >> $GITHUB_OUTPUT
+          "OUTPUT=$(echo $IMAGE_TAG)" >> $GITHUB_OUTPUT
           fi
       - name: debug
-        run: echo ${{ steps.set-image-tag.outputs.output_image_tag }}
+        run: echo ${{ steps.set-image-tag.outputs.OUTPUT }}
 
   deploy:
     needs: [set-image-tag]
