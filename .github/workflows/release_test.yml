@@ -51,3 +51,16 @@ jobs:
         with:
           event-type: release-qa
           client-payload: '{"image_tag": "${{ needs.set-image-tag.outputs.output_image_tag }}"}'
+  create-release-tag:
+    needs: [ deploy, set-image-tag ]
+    name: 'Release notes'
+    runs-on: 'ubuntu-latest'
+    env:
+      COMMIT: ''
+    steps:
+      - name: set date env
+        run: echo "NOW=$(date +'v%Y.%m.%d%H%M%S')" >> $GITHUB_ENV
+      - name: get sha from image tag
+        run: echo "COMMIT=$(echo ${{ needs.set-image-tag.outputs.output_image_tag }} | cut -d. -f2)" >> $GITHUB_ENV
+      - name: debug
+        run: echo $COMMIT
