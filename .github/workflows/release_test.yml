@@ -66,7 +66,7 @@ jobs:
 
       - name: get sha from image tag
         run: |
-          COMMIT=$(echo "${{ needs.set-image-tag.outputs.output_image_tag }}" | cut -d '.' -f 1)
+          COMMIT=$(echo "${{ needs.set-image-tag.outputs.output_image_tag }}" | cut -d '.' -f 2)
           echo "COMMIT=$COMMIT" >> $GITHUB_ENV
       - name: debug
         run: echo $COMMIT
