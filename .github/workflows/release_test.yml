@@ -22,13 +22,13 @@ jobs:
         id: set-image-tag
         run: |
           if [[ "${{ inputs.image_tag }}" != "" ]]; then
-            IMAGE_TAG=${{ inputs.image_tag }}
-          elif [[ ${{ github.event.client_payload.image_tag }} != "" ]]; then
-            IMAGE_TAG=${{ github.event.client_payload.image_tag }}
+            IMAGE_TAG="${{ inputs.image_tag }}"
+          elif [[ "${{ github.event.client_payload.image_tag }}" != "" ]]; then
+            IMAGE_TAG="${{ github.event.client_payload.image_tag }}"
           else
             BRANCH=${GITHUB_REF_NAME}
             VERSION=${GITHUB_SHA::8}
-            IMAGE_TAG=${BRANCH}.${VERSION}
+            IMAGE_TAG="${BRANCH}.${VERSION}"
 
           echo $IMAGE_TAG
           echo output_image_tag=$IMAGE_TAG >> $GITHUB_OUTPUT
