@@ -56,17 +56,15 @@ jobs:
     name: 'Release notes'
     runs-on: 'ubuntu-latest'
     env:
-      COMMIT: ''
+      SHA: ''
     steps:
       - name: set date env
         run: echo "NOW=$(date +'v%Y.%m.%d%H%M%S')" >> $GITHUB_ENV
-
-      - name: debug
-        run: echo ${{ needs.set-image-tag.outputs.output_image_tag }}
-
-      - name: get sha from image tag
+      - name: get commit from image tag
         run: |
           COMMIT=$(echo "${{ needs.set-image-tag.outputs.output_image_tag }}" | cut -d '.' -f 2)
-          echo "COMMIT=$COMMIT" >> $GITHUB_ENV
+          SHA=$(git rev-parse $COMMIT)
+          echo "SHA=$SHA" >> $GITHUB_ENV
+
       - name: debug
-        run: echo $COMMIT
+        run: echo $SHA
