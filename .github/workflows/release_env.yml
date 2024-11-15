@@ -1,3 +1,5 @@
+run-name: Release Test - ${{ env.IMAGE_TAG }}
+
 on:
   workflow_call:
     inputs:
@@ -18,6 +20,7 @@ env:
 jobs:
   mock:
     name: Mock
+    environment: ${{ inputs.DISCO_ENVIRONMENT }}
     runs-on: ubuntu-latest
     steps:
       - name: Mock
