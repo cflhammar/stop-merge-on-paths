@@ -60,6 +60,9 @@ jobs:
     steps:
       - name: set date env
         run: echo "NOW=$(date +'v%Y.%m.%d%H%M%S')" >> $GITHUB_ENV
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: get commit from image tag
         run: |
           COMMIT=$(echo "${{ needs.set-image-tag.outputs.output_image_tag }}" | cut -d '.' -f 2)
