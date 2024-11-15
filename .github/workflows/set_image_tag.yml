@@ -38,4 +38,4 @@ jobs:
 
       - name: debug
         run: |
-          echo "${{ steps.set-output.outputs.OUTPUT }}"
+          echo "${{ steps.set-image-tag.outputs.OUTPUT }}"
