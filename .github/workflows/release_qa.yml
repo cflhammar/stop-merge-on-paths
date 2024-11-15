@@ -11,34 +11,26 @@ on:
         required: false
         description: The short sha (8 first characters) of the commit to deploy, leave empty to deploy the latest commit.
 
-env:
-  IMAGE_TAG: ${{ inputs.image_tag }}
-
 jobs:
   set-image-tag:
     name: Set Image Tag
     runs-on: ubuntu-latest
     outputs:
-      output_image_tag: ${{ steps.set-output.outputs.output_image_tag }}
+      output_image_tag: ${{ steps.set-image-tag.outputs.output_image_tag }}
     steps:
-      - name: Set Manual Input as Image Tag
-        if: "${{ inputs.image_tag != '' }}"
-        run: echo "IMAGE_TAG=`echo ${{ inputs.image_tag }}`" >> $GITHUB_ENV
-
-      - name: Previous Workflow Output as Image Tag
-        if: "${{ inputs.image_tag == '' && github.event.client_payload.image_tag != '' }}"
-        run: echo "IMAGE_TAG=`echo ${{ github.event.client_payload.image_tag }}`" >> $GITHUB_ENV
-
-      - name: Set Last Commit on Current Branch as Image Tag
-        if: "${{ inputs.image_tag == '' && github.event.client_payload.image_tag == '' }}"
-        run: echo "IMAGE_TAG=`echo ${GITHUB_REF_NAME}.${GITHUB_SHA::8}`" >> $GITHUB_ENV
-
-      - name: debug
-        run: echo "IMAGE_TAG=${IMAGE_TAG}"
-
-      - name: Set output
-        id: set-output
-        run: echo "output_image_tag=${{ env.IMAGE_TAG }}" >> $GITHUB_OUTPUT
+        - name: Set Image Tag
+          id: set-image-tag
+          run: |
+            if [[ "${{ inputs.image_tag }}" != "" ]]; then
+              IMAGE_TAG=${{ inputs.image_tag }}
+            elif [[ ${{ github.event.client_payload.image_tag }} != "" ]]; then
+              IMAGE_TAG=${{ github.event.client_payload.image_tag }}
+            else
+              IMAGE_TAG=${GITHUB_REF_NAME}.${GITHUB_SHA::8}
+            
+            echo $IMAGE_TAG
+            echo output_image_tag=$IMAGE_TAG >> $GITHUB_OUTPUT
+            fi
 
   deploy:
     name: Deploy qa
