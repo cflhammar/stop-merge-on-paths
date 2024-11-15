@@ -16,7 +16,7 @@ jobs:
     name: Set Image Tag
     runs-on: ubuntu-latest
     outputs:
-        output_image_tag: ${{ steps.set-output.outputs.OUTPUT }}
+        output_image_tag: ${{ steps.set-image-tag.outputs.OUTPUT }}
     steps:
       - name: Set Image Tag
         id: set-image-tag
