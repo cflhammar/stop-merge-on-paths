@@ -45,8 +45,6 @@ jobs:
     needs: [ deploy, set-image-tag ]
     name: 'Release notes'
     runs-on: 'ubuntu-latest'
-    env:
-      SHA: ''
     steps:
       - name: set date env
         run: echo "NOW=$(date +'v%Y.%m.%d%H%M%S')" >> $GITHUB_ENV
