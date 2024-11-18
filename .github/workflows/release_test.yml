@@ -31,6 +31,7 @@ jobs:
 
   trigger-next:
     name: Trigger Next
+    if : github.ref_name != 'main'
     needs: [deploy, set-image-tag]
     runs-on: ubuntu-latest
     permissions: write-all
