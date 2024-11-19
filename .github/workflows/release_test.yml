@@ -1,6 +1,6 @@
 # This works as a ternary operator but using && and || instead of ? and :
 # Set dynamic name in gitHub actions UI
-run-name: Release Test - ${{ inputs.commit != '' && format('{0}.{1}', github.ref_name, inputs.commit) || github.event.client_payload.image_tag != '' && github.event.client_payload.image_tag || format('{0}.{1}', github.ref_name, 'latest comit on selected branch') }}
+run-name: Release Test - ${{ inputs.commit != '' && format('{0}.{1}', github.ref_name, inputs.commit) || github.event.client_payload.image_tag != '' && github.event.client_payload.image_tag || format('{0}{1}', 'No input - latest comit on ', github.ref_name) }}
 name: Release Test
 
 on:
@@ -34,7 +34,6 @@ jobs:
 
   trigger-next:
     name: Trigger Next
-    if : github.ref_name != 'main'
     needs: [deploy, set-image-tag]
     runs-on: ubuntu-latest
     permissions: write-all
