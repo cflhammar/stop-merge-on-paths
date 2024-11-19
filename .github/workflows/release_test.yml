@@ -1,6 +1,6 @@
 # This works as a ternary operator but using && and || instead of ? and :
 # Set dynamic name in gitHub actions UI
-run-name: Release Test ${{ inputs.commit != '' && inputs.commit || github.event.client_payload.image_tag != '' && github.event.client_payload.image_tag || 'latest comit' }}
+run-name: Release Test - ${{ inputs.commit != '' && inputs.commit || github.event.client_payload.image_tag != '' && github.event.client_payload.image_tag || 'latest comit' }}
 
 on:
   repository_dispatch:
