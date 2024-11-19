@@ -1,4 +1,5 @@
 name: Release Test
+run-name: Release Test run name
 
 on:
   repository_dispatch:
