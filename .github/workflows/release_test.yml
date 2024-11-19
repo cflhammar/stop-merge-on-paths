@@ -1,5 +1,5 @@
 name: Release Test
-run-name: Release Test ${{ jobs.set-image-tag.outputs.output_image_tag }}
+run-name: Release Test ${{ inputs.commit }} ${{ github.event.client_payload.image_tag }}
 
 on:
   repository_dispatch:

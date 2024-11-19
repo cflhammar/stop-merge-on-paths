@@ -1,5 +1,5 @@
 name: name
-run-name: run-name
+run-name: I dont care
 
 on:
   workflow_call:
