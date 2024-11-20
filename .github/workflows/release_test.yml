@@ -47,6 +47,9 @@ jobs:
 
   create-release-tag:
     needs: [ trigger-next, deploy ]
+    if: always() &&
+      (needs.deploy.result == 'success') &&
+      (needs.trigger-next.result == 'success' || needs.trigger-next.result == 'skipped')
     name: 'Release notes'
     runs-on: 'ubuntu-latest'
     steps:
