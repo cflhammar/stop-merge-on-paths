@@ -33,6 +33,7 @@ jobs:
     secrets: inherit
 
   trigger-next:
+    if: github.ref_name != 'main'
     name: Trigger Next
     needs: [deploy, set-image-tag]
     runs-on: ubuntu-latest
@@ -45,7 +46,7 @@ jobs:
           client-payload: '{"image_tag": "${{ needs.set-image-tag.outputs.output_image_tag }}"}'
 
   create-release-tag:
-    needs: [ deploy, set-image-tag ]
+    needs: [ trigger-next ]
     name: 'Release notes'
     runs-on: 'ubuntu-latest'
     steps:
