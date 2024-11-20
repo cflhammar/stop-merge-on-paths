@@ -46,7 +46,7 @@ jobs:
           client-payload: '{"image_tag": "${{ needs.set-image-tag.outputs.output_image_tag }}"}'
 
   create-release-tag:
-    needs: [ trigger-next ]
+    needs: [ trigger-next, deploy ]
     name: 'Release notes'
     runs-on: 'ubuntu-latest'
     steps:
