@@ -25,5 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Mock
-        run: echo ${{ inputs.IMAGE_TAG }}
-
+        run: |
+          echo ${{ inputs.IMAGE_TAG }}
+          exit 1
+          
